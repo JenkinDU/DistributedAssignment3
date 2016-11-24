@@ -1,6 +1,12 @@
 package dfrs.server;
 
-public class DFRSServerWST {
+import javax.jws.WebService;
+
+@WebService(endpointInterface="dfrs.server.IDFRSService",
+serviceName="DFRSServerWSTService",
+portName="DFRSServerWSTPort",
+targetNamespace="http://server.dfrs")
+public class DFRSServerWST extends DFRSServiceImple {
 	public static final String SERVER_NAME = "WST";
 	public static final String NAME = "Washington";
 	public static final String PORT_NUM = "1051";

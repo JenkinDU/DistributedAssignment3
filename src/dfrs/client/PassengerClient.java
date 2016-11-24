@@ -1,18 +1,12 @@
 package dfrs.client;
 
-import java.net.URL;
 import java.util.Scanner;
 
-import javax.xml.namespace.QName;
-import javax.xml.ws.Service;
-
 import dfrs.bean.Flight;
-import dfrs.bean.Result;
 import dfrs.bean.Ticket;
 import dfrs.server.DFRSServerMTL;
 import dfrs.server.DFRSServerNDL;
 import dfrs.server.DFRSServerWST;
-import dfrs.server.IDFRSService;
 import dfrs.utils.Utils;
 
 public class PassengerClient {
@@ -124,11 +118,20 @@ public class PassengerClient {
 
 	private boolean initConnection(String port) {
 		try {
-			URL url = new URL("http://localhost:"+port+"/dfrs?wsdl");
-			QName q = new QName("http://server.dfrs/", "DFRSServiceImpleService");
-			Service service = Service.create(url, q);
-			dfrsImpl = service.getPort(IDFRSService.class);
-			
+//			URL url = new URL("http://localhost:"+port+"/dfrs?wsdl");
+//			QName q = new QName("http://server.dfrs/", "DFRSServiceImpleService");
+//			Service service = Service.create(url, q);
+//			dfrsImpl = service.getPort(IDFRSService.class);
+			if(DFRSServerMTL.PORT_NUM.equals(port)) {
+				DFRSServerMTLService service = new DFRSServerMTLService();
+				dfrsImpl = service.getDFRSServerMTLPort();
+			} else if(DFRSServerWST.PORT_NUM.equals(port)) {
+				DFRSServerWSTService service = new DFRSServerWSTService();
+				dfrsImpl = service.getDFRSServerWSTPort();
+			} else if(DFRSServerNDL.PORT_NUM.equals(port)) {
+				DFRSServerNDLService service = new DFRSServerNDLService();
+				dfrsImpl = service.getDFRSServerNDLPort();
+			}
 			
 //			// create and initialize the ORB
 //			Properties props = new Properties();

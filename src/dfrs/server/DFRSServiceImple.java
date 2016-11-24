@@ -12,8 +12,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.jws.WebService;
-import javax.jws.soap.SOAPBinding;
-import javax.jws.soap.SOAPBinding.Style;
 
 import dfrs.bean.Flight;
 import dfrs.bean.Result;
@@ -26,18 +24,19 @@ import dfrs.transaction.TransferReservation;
 import dfrs.utils.Log;
 import dfrs.utils.Utils;
 
-@WebService(endpointInterface="dfrs.server.IDFRSService")
-@SOAPBinding(style=Style.RPC)
-public class DFRSServiceImple implements IDFRSService {
+//@SOAPBinding(style=Style.RPC)
+@WebService
+public class DFRSServiceImple {// implements IDFRSService {
 
 	private String LOG_PATH = Log.LOG_DIR+"LOG_";
 	private String server;
 	private String name;
 	private int UDP_PORT;
 	private int T_UDP_PORT;
-	
-	protected DFRSServiceImple(String server, String name, int udp, int tudp) {
-		super();
+	public DFRSServiceImple() {
+		
+	}
+	public void InitDFRSServiceImple(String server, String name, int udp, int tudp) {
 		String s = "[" + server + "]-" + "DFRSServer ready and waiting ...";
 		System.out.println(s);
 		FlightData.getInstance().initData(server);
@@ -68,7 +67,7 @@ public class DFRSServiceImple implements IDFRSService {
 		}).start();
 	}
 	
-	@Override
+//	@Override
 	public Result transferReservation(int passengerID, String currentCity, String otherCity) {
 //		System.out.println("["+server+"]-"+passengerID+"-START--transferReservation,passengerID:"+passengerID+"[this:"+this.toString()+"]");
 		int port = 0;
@@ -295,7 +294,7 @@ public class DFRSServiceImple implements IDFRSService {
 		return receive;
 	}
 	
-	@Override
+//	@Override
 	public synchronized Result bookFlight(String firstName, String lastName, String address, String phone, String destination,
 			String date, String ticketClass) {
 		String s = "["+server+"]-"+"Request Book Flight Order Passenger Info Is\n     -FirstName:"+firstName+"\n"
@@ -324,7 +323,7 @@ public class DFRSServiceImple implements IDFRSService {
 		Utils.printFlight(server);
 		return result;
 	}
-	@Override
+//	@Override
 	public String getBookedFlightCount(String recordType) {
 		String s = "["+server+"]-"+"Receive Get Booked Flight Count Request, RecordType Is: " + recordType;
 		System.out.println("\n"+s);
@@ -379,7 +378,7 @@ public class DFRSServiceImple implements IDFRSService {
 		return count;
 	}
 
-	@Override
+//	@Override
 	public Result editFlightRecord(int recordID, String fieldName, String newValue) {
 		String s = "["+server+"]-"+"Receive Edit Flight Record Request"+" recordID:" + recordID + " fieldName:" + fieldName + " newValue:" + newValue;
 		System.out.println("\n"+s);
@@ -484,7 +483,7 @@ public class DFRSServiceImple implements IDFRSService {
 		return result;
 	}
 
-	@Override
+//	@Override
 	public String getAllFlightInfo() {
 		String result = "";
 		ArrayList<Flight> flight = (ArrayList<Flight>)FlightData.getInstance().initData(server);

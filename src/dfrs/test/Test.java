@@ -1,17 +1,16 @@
 package dfrs.test;
 
-import java.net.URL;
 import java.util.Random;
 
-import javax.xml.namespace.QName;
-import javax.xml.ws.Service;
-
-import dfrs.bean.Result;
 import dfrs.bean.Ticket;
+import dfrs.client.DFRSServerMTLService;
+import dfrs.client.DFRSServerNDLService;
+import dfrs.client.DFRSServerWSTService;
+import dfrs.client.IDFRSService;
+import dfrs.client.Result;
 import dfrs.server.DFRSServerMTL;
 import dfrs.server.DFRSServerNDL;
 import dfrs.server.DFRSServerWST;
-import dfrs.server.IDFRSService;
 
 public abstract class Test {
 	
@@ -161,7 +160,7 @@ public abstract class Test {
 					} else if(departure == 2) {
 						index = des[0]==0?4:5;
 					}
-					if(result.success) {
+					if(result.isSuccess()) {
 						transfered(index);
 					} else {
 						transferFailed(index);
@@ -174,7 +173,7 @@ public abstract class Test {
 					} else if(departure == 2) {
 						index = des[1]==0?4:5;
 					}
-					if(result.success) {
+					if(result.isSuccess()) {
 						transfered(index);
 					} else {
 						transferFailed(index);
@@ -238,10 +237,21 @@ public abstract class Test {
 	
 	protected IDFRSService initConnection(int i, String port) {
 		try {
-			URL url = new URL("http://localhost:"+port+"/dfrs?wsdl");
-			QName q = new QName("http://server.dfrs/", "DFRSServiceImpleService");
-			Service service = Service.create(url, q);
-			IDFRSService dfrsImpl = service.getPort(IDFRSService.class);
+//			URL url = new URL("http://localhost:"+port+"/dfrs?wsdl");
+//			QName q = new QName("http://server.dfrs/", "DFRSServiceImpleService");
+//			Service service = Service.create(url, q);
+//			IDFRSService dfrsImpl = service.getPort(IDFRSService.class);
+			IDFRSService dfrsImpl = null;
+			if(DFRSServerMTL.PORT_NUM.equals(port)) {
+				DFRSServerMTLService service = new DFRSServerMTLService();
+				dfrsImpl = service.getDFRSServerMTLPort();
+			} else if(DFRSServerWST.PORT_NUM.equals(port)) {
+				DFRSServerWSTService service = new DFRSServerWSTService();
+				dfrsImpl = service.getDFRSServerWSTPort();
+			} else if(DFRSServerNDL.PORT_NUM.equals(port)) {
+				DFRSServerNDLService service = new DFRSServerNDLService();
+				dfrsImpl = service.getDFRSServerNDLPort();
+			}
 			
 //			// create and initialize the ORB
 //			Properties props = new Properties();

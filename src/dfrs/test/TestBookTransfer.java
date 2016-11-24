@@ -4,7 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import dfrs.server.IDFRSService;
+import dfrs.client.IDFRSService;
 
 public class TestBookTransfer extends dfrs.test.Test {
 	private static final int THREAD = 4;
